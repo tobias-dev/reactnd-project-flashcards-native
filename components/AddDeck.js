@@ -7,6 +7,9 @@ import {
   KeyboardAvoidingView,
   TouchableOpacity,
 } from 'react-native';
+import { connect } from 'react-redux';
+import { addDeck } from '../actions';
+import { addDeck as apiAddDeck } from '../utils/api';
 import { grey, darkGrey } from '../utils/colors';
 
 class AddDeck extends Component {
@@ -16,22 +19,30 @@ class AddDeck extends Component {
 
   handleTextChange = (text) => {
     this.setState(() => ({
-      deckTitle: text.trim(),
+      deckTitle: text,
     }));
   };
 
   handleSubmit = () => {
-    // @todo
-    const { navigation } = this.props;
-    navigation.navigate('Decks');
+    const { navigation, dispatch } = this.props;
+    const { deckTitle } = this.state;
+    const trimmedDeckTitle = deckTitle.trim();
+
+    apiAddDeck(trimmedDeckTitle);
+    dispatch(addDeck(trimmedDeckTitle));
+
+    navigation.navigate('DeckList');
+
     this.setState(() => ({
       deckTitle: '',
     }));
   };
 
   render() {
+    const { deckIds } = this.props;
     const { deckTitle } = this.state;
-    const buttonDisabled = !(deckTitle.length > 0);
+    const buttonDisabled =
+      !(deckTitle.length > 0) || deckIds.includes(deckTitle.trim());
 
     return (
       <KeyboardAvoidingView style={styles.container} behavior="padding">
@@ -97,4 +108,10 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AddDeck;
+function mapStateToProps(decks) {
+  return {
+    deckIds: Object.keys(decks),
+  };
+}
+
+export default connect(mapStateToProps)(AddDeck);

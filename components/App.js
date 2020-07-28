@@ -1,12 +1,14 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
+import { createStore } from 'redux';
+import { Provider } from 'react-redux';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { createDeckStackNavigator } from '@react-navigation/stack';
+import { createStackNavigator } from '@react-navigation/stack';
 import { FontAwesome5, FontAwesome } from '@expo/vector-icons';
 import Constants from 'expo-constants';
-import { darkGrey } from '../utils/colors';
+import reducer from '../reducers';
 import DeckList from './DeckList';
 import AddDeck from './AddDeck';
 import Deck from './Deck';
@@ -14,7 +16,7 @@ import AddCard from './AddCard';
 import Quiz from './Quiz';
 
 const TabNav = createBottomTabNavigator();
-const DeckStackNav = createDeckStackNavigator();
+const DeckStackNav = createStackNavigator();
 
 const DeckStackScreen = () => {
   return (
@@ -45,34 +47,36 @@ const DeckStackScreen = () => {
 
 export default App = () => {
   return (
-    <NavigationContainer>
-      <View style={styles.statusBar}>
-        <StatusBar />
-      </View>
-      <TabNav.Navigator
-        screenOptions={({ route }) => ({
-          tabBarIcon: ({ color }) => {
-            return route.name === 'Decks' ? (
-              <FontAwesome5 name="layer-group" size={20} color={color} />
-            ) : (
-              <FontAwesome name="plus-square" size={20} color={color} />
-            );
-          },
-        })}
-        tabBarOptions={{
-          activeTintColor: darkGrey,
-        }}
-      >
-        <Tab.Screen name="Decks" component={DeckStackScreen} />
-        <Tab.Screen name="Create" component={AddDeck} />
-      </TabNav.Navigator>
-    </NavigationContainer>
+    <Provider store={createStore(reducer)}>
+      <NavigationContainer>
+        <View style={styles.statusBar}>
+          <StatusBar />
+        </View>
+        <TabNav.Navigator
+          screenOptions={({ route }) => ({
+            tabBarIcon: ({ color }) => {
+              return route.name === 'Decks' ? (
+                <FontAwesome5 name="layer-group" size={20} color={color} />
+              ) : (
+                <FontAwesome name="plus-square" size={20} color={color} />
+              );
+            },
+          })}
+          tabBarOptions={{
+            activeTintColor: 'tomato',
+          }}
+        >
+          <TabNav.Screen name="Decks" component={DeckStackScreen} />
+          <TabNav.Screen name="Create" component={AddDeck} />
+        </TabNav.Navigator>
+      </NavigationContainer>
+    </Provider>
   );
 };
 
 const styles = StyleSheet.create({
   statusBar: {
     height: Constants.statusBarHeight,
-    backgroundColor: darkGrey,
+    backgroundColor: 'tomato',
   },
 });

@@ -1,56 +1,43 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { StyleSheet, Text, FlatList, TouchableOpacity } from 'react-native';
+import { connect } from 'react-redux';
+import { getDecks } from '../actions';
+import { getDecks as apiGetDecks } from '../utils/api';
 import { grey, darkGrey } from '../utils/colors';
 
-const DeckList = ({ navigation }) => {
-  const deckList = [
-    {
-      title: 'React',
-      questions: [
-        {
-          question: 'What is React?',
-          answer: 'A library for managing user interfaces',
-        },
-        {
-          question: 'Where do you make Ajax requests in React?',
-          answer: 'The componentDidMount lifecycle event',
-        },
-      ],
-    },
-    {
-      title: 'JavaScript',
-      questions: [
-        {
-          question: 'What is a closure?',
-          answer:
-            'The combination of a function and the lexical environment within which that function was declared.',
-        },
-      ],
-    },
-  ];
+class DeckList extends Component {
+  componentDidMount() {
+    const { dispatch } = this.props;
+    apiGetDecks().then((decks) => dispatch(getDecks(decks)));
+  }
 
-  return (
-    <FlatList
-      style={styles.list}
-      data={deckList}
-      keyExtractor={(item) => item.title}
-      renderItem={({ item }) => {
-        const { title, questions } = item;
-        return (
-          <TouchableOpacity
-            style={styles.deck}
-            onPress={() => navigation.navigate('Deck', { title })}
-          >
-            <Text style={styles.header}>{title}</Text>
-            <Text style={styles.text}>
-              {questions.length} card{questions.length > 1 && 's'}
-            </Text>
-          </TouchableOpacity>
-        );
-      }}
-    />
-  );
-};
+  render() {
+    const { deckList, navigation } = this.props;
+    return (
+      <FlatList
+        style={styles.list}
+        data={deckList}
+        keyExtractor={(item) => item.title}
+        renderItem={({ item }) => {
+          const { title, questions } = item;
+          return (
+            <TouchableOpacity
+              style={styles.deck}
+              onPress={() =>
+                navigation.navigate('Deck', { title, deckId: title })
+              }
+            >
+              <Text style={styles.header}>{title}</Text>
+              <Text style={styles.text}>
+                {questions.length} card{questions.length !== 1 && 's'}
+              </Text>
+            </TouchableOpacity>
+          );
+        }}
+      />
+    );
+  }
+}
 
 const styles = StyleSheet.create({
   deck: {
@@ -79,4 +66,10 @@ const styles = StyleSheet.create({
   },
 });
 
-export default DeckList;
+function mapStateToProps(decks) {
+  return {
+    deckList: Object.entries(decks).map(([key, deck]) => deck),
+  };
+}
+
+export default connect(mapStateToProps)(DeckList);

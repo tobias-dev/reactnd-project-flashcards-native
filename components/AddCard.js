@@ -6,6 +6,9 @@ import {
   Text,
   TextInput,
 } from 'react-native';
+import { connect } from 'react-redux';
+import { addCard } from '../actions';
+import { addCard as apiAddCard } from '../utils/api';
 import { grey, darkGrey } from '../utils/colors';
 
 class AddCard extends Component {
@@ -16,19 +19,33 @@ class AddCard extends Component {
 
   handleTextChange = (field) => (text) => {
     this.setState(() => ({
-      [field]: text.trim(),
+      [field]: text,
     }));
   };
 
   handleSubmit = () => {
-    // @todo
-    const { navigation } = this.props;
+    const { route, navigation, dispatch } = this.props;
+    const { deckId } = route.params;
+    const { question, answer } = this.state;
+    const trimmedQuestion = question.trim();
+    const trimmedAnswer = answer.trim();
+
+    apiAddCard(trimmedQuestion, trimmedAnswer, deckId);
+    dispatch(addCard(trimmedQuestion, trimmedAnswer, deckId));
     navigation.goBack();
+
+    this.setState(() => ({
+      question: '',
+      answer: '',
+    }));
   };
 
   render() {
+    const { questions } = this.props;
     const { question, answer } = this.state;
-    const buttonDisabled = !(question.length > 0 && answer.length > 0);
+    const buttonDisabled =
+      !(question.length > 0 && answer.length > 0) ||
+      questions.includes(question.trim());
 
     return (
       <KeyboardAvoidingView style={styles.container} behavior="padding">
@@ -86,4 +103,11 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AddCard;
+function mapStateToProps(decks, { route }) {
+  const { deckId } = route.params;
+  return {
+    questions: decks[deckId].questions.map((q) => q.question),
+  };
+}
+
+export default connect(mapStateToProps)(AddCard);

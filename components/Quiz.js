@@ -6,10 +6,15 @@ import {
   Text,
   Animated,
 } from 'react-native';
+import { connect } from 'react-redux';
 import { grey, darkGrey, red, green } from '../utils/colors';
+
+const QUIZ_COMPLETED = -1;
 
 class Quiz extends Component {
   state = {
+    cardNumber: 1,
+    correctAnswerCount: 0,
     showAnswer: false,
     bounceValue: new Animated.Value(1),
   };
@@ -37,19 +42,83 @@ class Quiz extends Component {
     );
   };
 
+  handleNextCard = (hasAnsweredCorrectly) => () => {
+    const { cardNumber, correctAnswerCount } = this.state;
+    const { questions } = this.props;
+    const newCardNumber =
+      cardNumber < questions.length ? cardNumber + 1 : QUIZ_COMPLETED;
+    const newCorrectAnswerCount = hasAnsweredCorrectly
+      ? correctAnswerCount + 1
+      : correctAnswerCount;
+
+    this.setState(() => ({
+      cardNumber: newCardNumber,
+      correctAnswerCount: newCorrectAnswerCount,
+      showAnswer: false,
+    }));
+  };
+
+  handleRestart = () => {
+    this.setState(() => ({
+      cardNumber: 1,
+      correctAnswerCount: 0,
+      showAnswer: false,
+    }));
+  };
+
   render() {
-    const { showAnswer, bounceValue } = this.state;
+    const {
+      cardNumber,
+      showAnswer,
+      bounceValue,
+      correctAnswerCount,
+    } = this.state;
+    const { questions, route, navigation } = this.props;
+    const { deckId } = route.params;
+
+    if (cardNumber === QUIZ_COMPLETED) {
+      return (
+        <View style={styles.container} behavior="padding">
+          <View style={styles.headerContainer}>
+            <Text style={[styles.header]}>
+              You have answered {correctAnswerCount} questions out of{' '}
+              {questions.length} correctly!
+            </Text>
+          </View>
+          <View style={styles.contentContainer}>
+            <TouchableOpacity
+              style={[styles.button]}
+              onPress={() =>
+                navigation.navigate('Deck', { title: deckId, deckId })
+              }
+            >
+              <Text style={styles.buttonLabel}>Back to Deck</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[styles.button]}
+              onPress={this.handleRestart}
+            >
+              <Text style={styles.buttonLabel}>Restart Quiz</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      );
+    }
+
+    const { question, answer } = questions[cardNumber - 1];
 
     return (
       <View style={styles.container} behavior="padding">
         <View style={styles.progressContainer}>
-          <Text>1 / 2</Text>
+          <Text>
+            {cardNumber} / {questions.length} (Correct: {correctAnswerCount})
+          </Text>
         </View>
         <View style={styles.headerContainer}>
           <Animated.Text
             style={[styles.header, { transform: [{ scale: bounceValue }] }]}
           >
-            {showAnswer ? 'My Answer' : 'What is the title of your new deck?'}
+            {showAnswer ? answer : question}
           </Animated.Text>
         </View>
         <TouchableOpacity
@@ -61,10 +130,16 @@ class Quiz extends Component {
           </Text>
         </TouchableOpacity>
         <View style={styles.contentContainer}>
-          <TouchableOpacity style={[styles.button, { backgroundColor: green }]}>
+          <TouchableOpacity
+            style={[styles.button, { backgroundColor: green }]}
+            onPress={this.handleNextCard(true)}
+          >
             <Text style={styles.buttonLabel}>Correct</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={[styles.button, { backgroundColor: red }]}>
+          <TouchableOpacity
+            style={[styles.button, { backgroundColor: red }]}
+            onPress={this.handleNextCard(false)}
+          >
             <Text style={styles.buttonLabel}>Incorrect</Text>
           </TouchableOpacity>
         </View>
@@ -95,6 +170,7 @@ const styles = StyleSheet.create({
   header: {
     fontSize: 22,
     color: darkGrey,
+    textAlign: 'center',
   },
   button: {
     padding: 20,
@@ -121,4 +197,11 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Quiz;
+function mapStateToProps(decks, { route }) {
+  const { deckId } = route.params;
+  return {
+    questions: decks[deckId].questions,
+  };
+}
+
+export default connect(mapStateToProps)(Quiz);
