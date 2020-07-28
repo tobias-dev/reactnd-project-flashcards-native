@@ -1,9 +1,9 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { createStackNavigator } from '@react-navigation/stack';
+import { createDeckStackNavigator } from '@react-navigation/stack';
 import { FontAwesome5, FontAwesome } from '@expo/vector-icons';
 import Constants from 'expo-constants';
 import { darkGrey } from '../utils/colors';
@@ -13,33 +13,33 @@ import Deck from './Deck';
 import AddCard from './AddCard';
 import Quiz from './Quiz';
 
-const Tab = createBottomTabNavigator();
-const DeckListStack = createStackNavigator();
+const TabNav = createBottomTabNavigator();
+const DeckStackNav = createDeckStackNavigator();
 
-const DeckListStackScreen = () => {
+const DeckStackScreen = () => {
   return (
-    <DeckListStack.Navigator>
-      <DeckListStack.Screen
+    <DeckStackNav.Navigator>
+      <DeckStackNav.Screen
         name="DeckList"
         component={DeckList}
         options={{ headerShown: false, title: 'Decks' }}
       />
-      <DeckListStack.Screen
+      <DeckStackNav.Screen
         name="Deck"
         component={Deck}
         options={({ route }) => ({ title: route.params.title })}
       />
-      <DeckListStack.Screen
+      <DeckStackNav.Screen
         name="AddCard"
         component={AddCard}
         options={{ title: 'Add Card' }}
       />
-      <DeckListStack.Screen
+      <DeckStackNav.Screen
         name="Quiz"
         component={Quiz}
         options={({ route }) => ({ title: route.params.title })}
       />
-    </DeckListStack.Navigator>
+    </DeckStackNav.Navigator>
   );
 };
 
@@ -49,7 +49,7 @@ export default App = () => {
       <View style={styles.statusBar}>
         <StatusBar />
       </View>
-      <Tab.Navigator
+      <TabNav.Navigator
         screenOptions={({ route }) => ({
           tabBarIcon: ({ color }) => {
             return route.name === 'Decks' ? (
@@ -63,9 +63,9 @@ export default App = () => {
           activeTintColor: darkGrey,
         }}
       >
-        <Tab.Screen name="Decks" component={DeckListStackScreen} />
+        <Tab.Screen name="Decks" component={DeckStackScreen} />
         <Tab.Screen name="Create" component={AddDeck} />
-      </Tab.Navigator>
+      </TabNav.Navigator>
     </NavigationContainer>
   );
 };

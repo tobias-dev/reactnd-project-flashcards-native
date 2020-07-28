@@ -3,6 +3,8 @@ import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import { grey, darkGrey, lightGrey } from '../utils/colors';
 
 const Deck = ({ navigation }) => {
+  const quizDisabled = true;
+
   return (
     <View style={styles.container}>
       <View style={styles.headerContainer}>
@@ -17,7 +19,8 @@ const Deck = ({ navigation }) => {
           <Text style={[styles.text, styles.buttonLabel]}>Add Card</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          style={styles.button}
+          style={[styles.button, , { opacity: quizDisabled ? 0.5 : 1 }]}
+          disabled={quizDisabled}
           onPress={() => navigation.navigate('Quiz', { title: 'My Title' })}
         >
           <Text style={[styles.text, styles.buttonLabel]}>Start Quiz</Text>

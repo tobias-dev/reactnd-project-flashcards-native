@@ -57,7 +57,7 @@ class Quiz extends Component {
           onPress={this.handleTurnCard}
         >
           <Text style={[styles.textButtonLabel]}>
-            {showAnswer ? 'Question' : 'Answer'}
+            Show {showAnswer ? 'Question' : 'Answer'}
           </Text>
         </TouchableOpacity>
         <View style={styles.contentContainer}>
