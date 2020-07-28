@@ -4,11 +4,13 @@ import { connect } from 'react-redux';
 import { getDecks } from '../actions';
 import { getDecks as apiGetDecks } from '../utils/api';
 import { grey, darkGrey } from '../utils/colors';
+import { setLocalNotification } from '../utils/notifications';
 
 class DeckList extends Component {
   componentDidMount() {
     const { dispatch } = this.props;
     apiGetDecks().then((decks) => dispatch(getDecks(decks)));
+    setLocalNotification();
   }
 
   render() {
