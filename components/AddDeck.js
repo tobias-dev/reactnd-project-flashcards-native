@@ -16,7 +16,7 @@ class AddDeck extends Component {
 
   handleTextChange = (text) => {
     this.setState(() => ({
-      deckTitle: text,
+      deckTitle: text.trim(),
     }));
   };
 
@@ -31,6 +31,8 @@ class AddDeck extends Component {
 
   render() {
     const { deckTitle } = this.state;
+    const buttonDisabled = !(deckTitle.length > 0);
+
     return (
       <KeyboardAvoidingView style={styles.container} behavior="padding">
         <View style={styles.headerContainer}>
@@ -42,7 +44,11 @@ class AddDeck extends Component {
             value={deckTitle}
             onChangeText={this.handleTextChange}
           />
-          <TouchableOpacity style={styles.button} onPress={this.handleSubmit}>
+          <TouchableOpacity
+            style={[styles.button, { opacity: buttonDisabled ? 0.5 : 1 }]}
+            disabled={buttonDisabled}
+            onPress={this.handleSubmit}
+          >
             <Text style={styles.buttonLabel}>Create Deck</Text>
           </TouchableOpacity>
         </View>
@@ -84,6 +90,7 @@ const styles = StyleSheet.create({
     borderRadius: 7,
     margin: 20,
     marginBottom: 0,
+    opacity: 0.5,
   },
   buttonLabel: {
     fontSize: 20,

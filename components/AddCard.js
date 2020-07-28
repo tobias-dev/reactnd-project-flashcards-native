@@ -16,7 +16,7 @@ class AddCard extends Component {
 
   handleTextChange = (field) => (text) => {
     this.setState(() => ({
-      [field]: text,
+      [field]: text.trim(),
     }));
   };
 
@@ -28,6 +28,8 @@ class AddCard extends Component {
 
   render() {
     const { question, answer } = this.state;
+    const buttonDisabled = !(question.length > 0 && answer.length > 0);
+
     return (
       <KeyboardAvoidingView style={styles.container} behavior="padding">
         <Text style={styles.text}>Question</Text>
@@ -42,7 +44,11 @@ class AddCard extends Component {
           value={answer}
           onChangeText={this.handleTextChange('answer')}
         />
-        <TouchableOpacity style={styles.button} onPress={this.handleSubmit}>
+        <TouchableOpacity
+          style={[styles.button, { opacity: buttonDisabled ? 0.5 : 1 }]}
+          disabled={buttonDisabled}
+          onPress={this.handleSubmit}
+        >
           <Text style={[styles.text, styles.buttonLabel]}>Submit</Text>
         </TouchableOpacity>
       </KeyboardAvoidingView>
