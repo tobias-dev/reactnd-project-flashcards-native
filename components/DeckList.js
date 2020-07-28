@@ -1,14 +1,8 @@
 import React from 'react';
-import {
-  StyleSheet,
-  Text,
-  View,
-  FlatList,
-  TouchableOpacity,
-} from 'react-native';
-import { grey, darkGrey, lightGrey, white } from '../utils/colors';
+import { StyleSheet, Text, FlatList, TouchableOpacity } from 'react-native';
+import { grey, darkGrey } from '../utils/colors';
 
-const DeckList = () => {
+const DeckList = ({ navigation }) => {
   const deckList = [
     {
       title: 'React',
@@ -43,7 +37,10 @@ const DeckList = () => {
       renderItem={({ item }) => {
         const { title, questions } = item;
         return (
-          <TouchableOpacity style={styles.deck}>
+          <TouchableOpacity
+            style={styles.deck}
+            onPress={() => navigation.navigate('Deck', { title })}
+          >
             <Text style={styles.header}>{title}</Text>
             <Text style={styles.text}>
               {questions.length} card{questions.length > 1 && 's'}
@@ -56,9 +53,6 @@ const DeckList = () => {
 };
 
 const styles = StyleSheet.create({
-  list: {
-    backgroundColor: white,
-  },
   deck: {
     padding: 20,
     paddingTop: 30,
@@ -77,8 +71,8 @@ const styles = StyleSheet.create({
     shadowOpacity: 1,
   },
   header: {
-    fontSize: 20,
-    color: lightGrey,
+    fontSize: 23,
+    color: darkGrey,
   },
   text: {
     color: darkGrey,
