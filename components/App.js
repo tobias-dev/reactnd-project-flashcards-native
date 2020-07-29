@@ -14,6 +14,7 @@ import AddDeck from './AddDeck';
 import Deck from './Deck';
 import AddCard from './AddCard';
 import Quiz from './Quiz';
+import { setLocalNotification } from '../utils/notifications';
 
 const TabNav = createBottomTabNavigator();
 const DeckStackNav = createStackNavigator();
@@ -43,7 +44,7 @@ const DeckStackScreen = () => {
 
 class App extends Component {
   componentDidMount() {
-    setLocalNotification();
+    setLocalNotification;
   }
 
   render() {
