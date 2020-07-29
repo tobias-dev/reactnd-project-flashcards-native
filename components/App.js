@@ -36,11 +36,7 @@ const DeckStackScreen = () => {
         component={AddCard}
         options={{ title: 'Add Card' }}
       />
-      <DeckStackNav.Screen
-        name="Quiz"
-        component={Quiz}
-        options={({ route }) => ({ title: route.params.title })}
-      />
+      <DeckStackNav.Screen name="Quiz" component={Quiz} />
     </DeckStackNav.Navigator>
   );
 };

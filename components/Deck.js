@@ -37,7 +37,7 @@ const Deck = ({ deck, navigation, dispatch }) => {
         <TouchableOpacity
           style={[styles.button, , { opacity: quizDisabled ? 0.5 : 1 }]}
           disabled={quizDisabled}
-          onPress={() => navigation.navigate('Quiz', { title, deckId: title })}
+          onPress={() => navigation.navigate('Quiz', { deckId: title })}
         >
           <Text style={[styles.text, styles.buttonLabel]}>Start Quiz</Text>
         </TouchableOpacity>
