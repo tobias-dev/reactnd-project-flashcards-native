@@ -111,7 +111,7 @@ class Quiz extends Component {
       <View style={styles.container} behavior="padding">
         <View style={styles.progressContainer}>
           <Text>
-            {cardNumber} / {questions.length} (Correct: {correctAnswerCount})
+            {cardNumber} / {questions.length}
           </Text>
         </View>
         <View style={styles.headerContainer}>
