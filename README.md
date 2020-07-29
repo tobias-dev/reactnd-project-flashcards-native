@@ -7,8 +7,15 @@ This is the Udacity React Native course final project .
 
 This project has ben developed tested using iOS simulator, therefore to install and run it on your machine use the following instructions:
 
-- install all project dependencies with `yarn install`
-- start the simulator with `yarn ios`
+### Install
+
+- Install project dependencies with `yarn install`.
+- Install ios simulator dependencies in the subfolder `ios` with `pod install`.
+
+### Start
+
+- Start React Native Packager with `yarn start`.
+- Start the simulator with `yarn ios`.
 
 ## Specific Requirements
 
