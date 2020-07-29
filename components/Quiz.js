@@ -81,8 +81,8 @@ class Quiz extends Component {
         <View style={styles.container} behavior="padding">
           <View style={styles.headerContainer}>
             <Text style={[styles.header]}>
-              You have answered {correctAnswerCount} questions out of{' '}
-              {questions.length} correctly!
+              You got {correctAnswerCount} questions out of {questions.length}{' '}
+              correctly!
             </Text>
           </View>
           <View style={styles.contentContainer}>
