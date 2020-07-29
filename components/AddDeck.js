@@ -31,7 +31,10 @@ class AddDeck extends Component {
     apiAddDeck(trimmedDeckTitle);
     dispatch(addDeck(trimmedDeckTitle));
 
-    navigation.navigate('Deck', { trimmedDeckTitle, deckId: trimmedDeckTitle });
+    navigation.navigate('Deck', {
+      title: trimmedDeckTitle,
+      deckId: trimmedDeckTitle,
+    });
 
     this.setState(() => ({
       deckTitle: '',
