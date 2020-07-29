@@ -10,7 +10,7 @@ This project has ben developed tested using iOS simulator, therefore to install 
 ### Install
 
 - Install project dependencies with `yarn install`.
-- Install ios simulator dependencies in the subfolder `ios` with `pod install`.
+- Install iOS simulator dependencies in the subfolder `ios` with `pod install`.
 
 ### Start
 
