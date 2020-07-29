@@ -7,6 +7,10 @@ import {
   Animated,
 } from 'react-native';
 import { connect } from 'react-redux';
+import {
+  clearLocalNotification,
+  setLocalNotification,
+} from '../utils/notifications';
 import { grey, darkGrey, red, green } from '../utils/colors';
 
 const QUIZ_COMPLETED = -1;
@@ -56,6 +60,10 @@ class Quiz extends Component {
       correctAnswerCount: newCorrectAnswerCount,
       showAnswer: false,
     }));
+
+    if (newCardNumber === QUIZ_COMPLETED) {
+      clearLocalNotification().then(setLocalNotification);
+    }
   };
 
   handleRestart = () => {

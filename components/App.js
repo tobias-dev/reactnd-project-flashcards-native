@@ -1,5 +1,5 @@
+import React, { Component } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
@@ -41,34 +41,42 @@ const DeckStackScreen = () => {
   );
 };
 
-export default App = () => {
-  return (
-    <Provider store={createStore(reducer)}>
-      <NavigationContainer>
-        <View style={styles.statusBar}>
-          <StatusBar />
-        </View>
-        <TabNav.Navigator
-          screenOptions={({ route }) => ({
-            tabBarIcon: ({ color }) => {
-              return route.name === 'Decks' ? (
-                <FontAwesome5 name="layer-group" size={20} color={color} />
-              ) : (
-                <FontAwesome name="plus-square" size={20} color={color} />
-              );
-            },
-          })}
-          tabBarOptions={{
-            activeTintColor: 'tomato',
-          }}
-        >
-          <TabNav.Screen name="Decks" component={DeckStackScreen} />
-          <TabNav.Screen name="Create" component={AddDeck} />
-        </TabNav.Navigator>
-      </NavigationContainer>
-    </Provider>
-  );
-};
+class App extends Component {
+  componentDidMount() {
+    setLocalNotification();
+  }
+
+  render() {
+    return (
+      <Provider store={createStore(reducer)}>
+        <NavigationContainer>
+          <View style={styles.statusBar}>
+            <StatusBar />
+          </View>
+          <TabNav.Navigator
+            screenOptions={({ route }) => ({
+              tabBarIcon: ({ color }) => {
+                return route.name === 'Decks' ? (
+                  <FontAwesome5 name="layer-group" size={20} color={color} />
+                ) : (
+                  <FontAwesome name="plus-square" size={20} color={color} />
+                );
+              },
+            })}
+            tabBarOptions={{
+              activeTintColor: 'tomato',
+            }}
+          >
+            <TabNav.Screen name="Decks" component={DeckStackScreen} />
+            <TabNav.Screen name="Create" component={AddDeck} />
+          </TabNav.Navigator>
+        </NavigationContainer>
+      </Provider>
+    );
+  }
+}
+
+export default App;
 
 const styles = StyleSheet.create({
   statusBar: {
