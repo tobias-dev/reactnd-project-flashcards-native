@@ -5,7 +5,7 @@ This is the Udacity React Native course final project .
 
 ## Install and start
 
-This project has ben developed tested using iOS simulator, therefore to install and run it on your machine use the following instructions:
+This project has been developed tested using iOS simulator, therefore to install and run it on your machine use the following instructions:
 
 ### Install
 
